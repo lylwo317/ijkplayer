@@ -10,16 +10,28 @@ android {
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion rootProject.ext.targetSdkVersion
+        ndk {
+            //设置支持的SO库架构
+            abiFilters 'armeabi-v7a'
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug{
+            debuggable true
+        }
     }
-    sourceSets.main {
-        jniLibs.srcDirs 'src/main/libs'
-        jni.srcDirs = [] // This prevents the auto generation of Android.mk
+//    sourceSets.main {
+//        jniLibs.srcDirs 'src/main/libs'
+//        jni.srcDirs = [] // This prevents the auto generation of Android.mk
+//    }
+    externalNativeBuild{
+        ndkBuild {
+            path '../ijkplayer-armv7a/src/main/jni/Android.mk'
+        }
     }
 }
 
