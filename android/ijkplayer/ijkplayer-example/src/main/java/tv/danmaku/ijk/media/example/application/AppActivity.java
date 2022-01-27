@@ -35,7 +35,7 @@ import tv.danmaku.ijk.media.example.activities.SettingsActivity;
 
 @SuppressLint("Registered")
 public class AppActivity extends AppCompatActivity {
-    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+    public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

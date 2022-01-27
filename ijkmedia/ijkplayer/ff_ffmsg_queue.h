@@ -70,13 +70,13 @@ inline static int msg_queue_put_private(MessageQueue *q, AVMessage *msg)
 #ifdef FFP_MERGE
     msg1 = av_malloc(sizeof(AVMessage));
 #else
-    msg1 = q->recycle_msg;
+    msg1 = q->recycle_msg;//存在回收的消息
     if (msg1) {
         q->recycle_msg = msg1->next;
         q->recycle_count++;
     } else {
         q->alloc_count++;
-        msg1 = av_malloc(sizeof(AVMessage));
+        msg1 = av_malloc(sizeof(AVMessage));//没有回收的消息，就创建新的
     }
 #ifdef FFP_SHOW_MSG_RECYCLE
     int total_count = q->recycle_count + q->alloc_count;
@@ -85,19 +85,19 @@ inline static int msg_queue_put_private(MessageQueue *q, AVMessage *msg)
     }
 #endif
 #endif
-    if (!msg1)
+    if (!msg1)//内存不足，创建失败，就返回-1
         return -1;
 
-    *msg1 = *msg;
-    msg1->next = NULL;
+    *msg1 = *msg;//结构体赋值
+    msg1->next = NULL;//设置next为null
 
     if (!q->last_msg)
-        q->first_msg = msg1;
+        q->first_msg = msg1;//队列为空，赋值给first_msg
     else
-        q->last_msg->next = msg1;
+        q->last_msg->next = msg1;//队列不为空，赋值给last_msg->next
     q->last_msg = msg1;
-    q->nb_messages++;
-    SDL_CondSignal(q->cond);
+    q->nb_messages++;//消息数量+1
+    SDL_CondSignal(q->cond);//唤醒 wait该 Cond的线程
     return 0;
 }
 

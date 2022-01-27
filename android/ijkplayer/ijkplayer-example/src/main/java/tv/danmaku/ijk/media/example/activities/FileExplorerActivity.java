@@ -17,6 +17,7 @@
 
 package tv.danmaku.ijk.media.example.activities;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -44,6 +45,10 @@ public class FileExplorerActivity extends AppActivity {
             mSettings = new Settings(this);
         }
 
+        updateOpen();
+    }
+
+    private void updateOpen(){
         String lastDirectory = mSettings.getLastDirectory();
         if (!TextUtils.isEmpty(lastDirectory) && new File(lastDirectory).isDirectory())
             doOpenDirectory(lastDirectory, false);
@@ -74,6 +79,20 @@ public class FileExplorerActivity extends AppActivity {
         if (addToBackStack)
             transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the task you need to do.
+                    updateOpen();
+                } else {
+                    // permission denied, boo! Disable the functionality that depends on this permission.
+                }
+            }
+        }
     }
 
     @Subscribe
