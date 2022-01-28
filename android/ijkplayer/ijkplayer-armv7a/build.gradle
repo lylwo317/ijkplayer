@@ -26,7 +26,7 @@ android {
 //    }
     externalNativeBuild{
         ndkBuild {
-            path '../ijkplayer-armv7a/src/main/jni/Android.mk'
+            path 'src/main/jni/Android.mk'
         }
     }
 }
